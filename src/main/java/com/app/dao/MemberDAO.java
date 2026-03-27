@@ -1,5 +1,7 @@
 package com.app.dao;
 
+import java.util.Optional;
+
 import org.apache.ibatis.session.SqlSession;
 
 import com.app.mybatis.config.MyBatisConfig;
@@ -17,6 +19,27 @@ public class MemberDAO {
 	     sqlSession.insert("member.insert", memberVO);
 	  }
   
+//	이메일과 비밀번호로 회원 조회
+	  public Optional<MemberVO> findByMemberEmailAndMemberPassword(MemberVO memberVO) {
+		  return Optional.ofNullable(sqlSession.selectOne("member.selectByMemberEmailAndMemberPassword", memberVO));
+	  }
+	  
+//	  이메일로 회원 여부 조회
+	  public int existsByMemberEmail (String memberEmail) {
+		  return sqlSession.selectOne("member.existsByMemberEmail", memberEmail);
+	  }
+	  
+//	  이메일로 회원 조회
+	  public Optional<MemberVO> findByMemberEmail(String memberEmail) {
+		return Optional.ofNullable(sqlSession.selectOne("member.selectByMemberEmail", memberEmail));
+	}
+	  
+//	  id로 회원 조회
+	  public Optional<MemberVO> findById(Long id) {
+		return Optional.ofNullable(sqlSession.selectOne("member.selectById", id));
+	}
+	  
+	  
 	//  select: 전체 조회
 	//  public void findAll() {}
 	  
