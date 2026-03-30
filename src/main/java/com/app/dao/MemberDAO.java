@@ -39,7 +39,10 @@ public class MemberDAO {
 		return Optional.ofNullable(sqlSession.selectOne("member.selectById", id));
 	}
 	  
-	  
+//	  이메일로 id 조회
+	  public Long selectIdByMemberEmail(String memberEmail) {
+			return sqlSession.selectOne("member.selectIdByMemberEmail", memberEmail);
+	}
 	//  select: 전체 조회
 	//  public void findAll() {}
 	  

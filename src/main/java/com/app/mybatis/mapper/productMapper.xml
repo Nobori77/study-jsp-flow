@@ -31,4 +31,11 @@
 		DELETE FROM TBL_PRODUCT
 		WHERE ID = #{id}
 	</delete>
+	
+	<update id="decreaseStock">
+	    UPDATE TBL_PRODUCT
+	    SET PRODUCT_STOCK = PRODUCT_STOCK - #{count}
+	    WHERE ID = #{id}
+	</update>
+	
 </mapper>

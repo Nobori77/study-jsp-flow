@@ -56,6 +56,7 @@
    const inputs = document.querySelectorAll("#product-table input")
    const orderButton = document.querySelector("#order-button")
    
+   NodeList.prototype.filter = Array.prototype.filter;
    NodeList.prototype.find = Array.prototype.find;
    
    inputs.forEach((input) => {
@@ -70,7 +71,7 @@
                "<input name='productId' type='hidden' value='"+ id + "' />" +
                "<td>" + productName + "</td>" +
                "<td>" + productPrice + "</td>" +
-               "<td><input name='productCount' value='1' /></td>" +
+               "<td><input name='orderCount' value='1' /></td>" +
             "</tr>"
          )
          
@@ -89,8 +90,40 @@
    })
    
    /* 버튼을 누르면 주문 수량이 0이거나, 상품의 재고보다 구매수량이 많은 경우 요청X */
-   
-   
+   orderButton.addEventListener("click", (e) => {
+      e.preventDefault();
+      
+      const productIdInputs = document.querySelectorAll("#order-table input[name='productId']");
+      const productCountInputs = document.querySelectorAll("#order-table input[name='orderCount']");
+      const submitState = [false, false]
+      
+      /* 
+         1. 주문수량이 0인경우
+      */
+      if(productCountInputs.filter((input) => Number(input.value) !== 0).length !== productCountInputs.length){
+         return alert('주문 수량이 없습니다.')
+      }else {
+         submitState[0] = true;
+      }
+      
+      /*  
+         2. 주문수량보다 제품수량이 적은경우, 구매하려는 수량이 제품의 수량보다 많은 경우
+      */
+      productCountInputs.forEach((_, i) => {
+         const productId = productIdInputs[i].value
+         const orderCount = productCountInputs[i].value
+         const orderedProduct = products.find(({id}) => String(id) === productId)
+         
+         if(orderCount > orderedProduct.productStock){
+            return alert("구매수량이 상품 수량보다 많습니다.")
+         }else{
+            submitState[1] = true
+            if(submitState.filter((state) => state).length === 2){
+               orderForm.submit();
+            }
+         }
+      })
+   })
    
 </script>
 </html>
